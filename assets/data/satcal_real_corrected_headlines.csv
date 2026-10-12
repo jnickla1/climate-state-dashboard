@@ -1,3 +1,9 @@
+# Dashboard temperature series are displayed from 1965; earlier data rows are retained.
+# CAUTION: pre-1965 smoothed anthropogenic estimates are not directly comparable to later estimates.
+# FaIR applies a prescribed mean during 1930-1964 and contracts current samples; GWI is unavailable before 1950.
+# Treat those early anthropogenic method outputs separately; the pinch does not demonstrate low physical uncertainty.
+# This warning does not invalidate annual observational data or other realised methods.
+# These metadata lines are comments: use pandas.read_csv(path, comment="#") or skip leading # lines.
 method,level,level_interval,rate,rate_se
 PIVW_comb,0.6712556328160747,"[0.5901427351204587, 0.761794988146719]",0.31881724894864516,0.05415685181074773
 equal_weight_comb,0.6801880360694014,"[0.5912415230350124, 0.7789252418712538]",0.31745600815489067,0.051387780759904376

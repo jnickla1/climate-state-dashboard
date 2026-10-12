@@ -10,3 +10,8 @@
 .chart-subtitle{font-size:11px;line-height:1.6;color:var(--muted);margin:8px 23px 0}
 .heat-plot{height:375px}
 .line-key .crossing-window{height:12px;width:15px;border:1px solid #c5ccc7;background:rgba(82,99,90,.035)}
+
+.warming-controls{display:flex;gap:10px;flex-wrap:wrap;padding:12px 23px 0}
+.benchmark-toggle input:checked{background:var(--blue);border-color:var(--blue)}
+.benchmark-toggle:has(input:checked){background:#eef0ff;border-color:#a6afea}
+.download-note{font-size:11px!important}.download-note code{overflow-wrap:anywhere}

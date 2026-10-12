@@ -1,3 +1,9 @@
+# Dashboard temperature series are displayed from 1965; earlier data rows are retained.
+# CAUTION: pre-1965 smoothed anthropogenic estimates are not directly comparable to later estimates.
+# FaIR applies a prescribed mean during 1930-1964 and contracts current samples; GWI is unavailable before 1950.
+# Treat those early anthropogenic method outputs separately; the pinch does not demonstrate low physical uncertainty.
+# This warning does not invalidate annual observational data or other realised methods.
+# These metadata lines are comments: use pandas.read_csv(path, comment="#") or skip leading # lines.
 year,member_0,member_1,member_2,member_3,member_4,member_5,member_6,member_7,member_8,member_9,member_10,member_11,member_12,member_13,member_14,member_15,member_16,member_17,member_18,member_19,member_20,member_21,member_22,member_23,member_24,member_25,member_26,member_27,member_28,member_29,member_30,member_31,member_32,member_33,member_34,member_35,member_36,member_37,member_38,member_39,member_40,member_41,member_42,member_43,member_44,member_45,member_46,member_47,member_48,member_49,member_50,member_51,member_52,member_53,member_54,member_55,member_56,member_57,member_58,member_59,member_60,member_61,member_62,member_63,member_64,member_65,member_66,member_67,member_68,member_69,member_70,member_71,member_72,member_73,member_74,member_75,member_76,member_77,member_78,member_79,member_80,member_81,member_82,member_83,member_84,member_85,member_86,member_87,member_88,member_89,member_90,member_91,member_92,member_93,member_94,member_95,member_96,member_97,member_98,member_99
 1850.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 1851.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
