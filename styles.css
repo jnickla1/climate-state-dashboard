@@ -3,3 +3,10 @@
 .density-heading-controls{display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:flex-end}.scale-toggle{display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid #cfd9d1;border-radius:5px;cursor:pointer;background:#fafbf9}.scale-toggle input{accent-color:var(--red);width:28px;height:15px;margin:0}.scale-toggle span{color:var(--ink);font-size:10px}.scale-toggle:has(input:checked){background:#fff0e8;border-color:#e1a289}.density-card .card-heading{flex-wrap:wrap;align-items:center}@media(max-width:760px){.density-heading-controls{justify-content:flex-start;margin-top:10px;gap:12px}}
 
 .scale-toggle input{appearance:none;-webkit-appearance:none;border:1px solid #bbc9be;border-radius:10px;background:#e0e7e2;width:29px;height:17px;position:relative;cursor:pointer}.scale-toggle input::before{content:"";display:block;width:13px;height:13px;background:white;border-radius:50%;position:absolute;left:1px;top:1px;box-shadow:0 1px 2px #0002;transition:transform .15s}.scale-toggle input:checked{background:var(--red);border-color:var(--red)}.scale-toggle input:checked::before{transform:translateX(12px)}.scale-toggle input:focus-visible{outline:3px solid #79b9f4;outline-offset:3px}
+
+/* Coauthor readability edits: presentation only. */
+.metric-note{font-size:10px;line-height:1.5;color:var(--muted);margin:8px 0 0}
+.likelihood-card .metric-label{font-size:13px;line-height:1.5;font-weight:600;color:var(--ink)}
+.chart-subtitle{font-size:11px;line-height:1.6;color:var(--muted);margin:8px 23px 0}
+.heat-plot{height:375px}
+.line-key .crossing-window{height:12px;width:15px;border:1px solid #c5ccc7;background:rgba(82,99,90,.035)}
