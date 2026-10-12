@@ -7,7 +7,7 @@ const qs=new URLSearchParams(location.search);
 for(const [id,key] of [['goal','warming'],['baseline','calibration'],['background','background']]){const val=qs.get(key);if(val&&[...$(id).options].some(o=>o.value===val))$(id).value=val;}
 const f=(x,n=3)=>Number.isFinite(x)?x.toFixed(n):'pending';
 const meanAt=(matrix,i)=>{const v=matrix.map(r=>r[i]).filter(Number.isFinite);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;};
-const qualifier=p=>p<.01?'Exceptionally unlikely':p<.1?'Very unlikely':p<.33?'Unlikely':p<.66?'About as likely as not':p<.9?'Likely':p<.99?'Very likely':'Virtually certain';
+const qualifier=p=>p<.01?'Exceptionally unlikely':p<=.05?'Extremely unlikely':p<.1?'Very unlikely':p<.33?'Unlikely':p<.66?'About as likely as not':p<.9?'Likely':p<.99?'Very likely':'Virtually certain';
 const plotConfig={responsive:true,displaylogo:false,scrollZoom:false,modeBarButtonsToRemove:['lasso2d','select2d'],toImageButtonOptions:{format:'svg',filename:'climate-state-chart'}};
 $('densityZoom').checked=qs.get('magnify')==='1';
 const commonLayout={paper_bgcolor:'#fff',plot_bgcolor:'#fff',font:{family:'Inter, -apple-system, sans-serif',color:'#52635a',size:11},hoverlabel:{bgcolor:'#fff',font:{color:'#192921'}},showlegend:false};
