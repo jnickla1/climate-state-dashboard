@@ -22,3 +22,22 @@
 
 /* Optional, non-modal rate panel anchored immediately below the metric cards. */
 .metrics-stack{position:relative}.rate-history-button{margin-top:12px;padding:7px 10px;border:1px solid #cfd9d1;border-radius:5px;background:#fafbf9;color:var(--green);font-size:11px;cursor:pointer}.rate-history-panel{position:absolute;z-index:30;top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:min(960px,100%);background:#fff;border:1px solid #aabbb0;border-radius:10px;box-shadow:0 12px 35px rgba(25,41,33,.23);padding:18px 20px}.rate-history-panel[hidden]{display:none}.rate-history-heading{display:flex;align-items:center;justify-content:space-between;gap:15px}.rate-history-heading h2{font-size:18px;margin:0}.rate-history-heading button{border:0;background:#edf2ed;color:var(--ink);border-radius:5px;font-size:23px;cursor:pointer;width:34px;height:34px}.rate-history-options{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:12px;font-size:11px}.rate-history-options label{display:flex;align-items:center;gap:10px}.rate-history-options select{font-size:11px;max-width:100%}.rate-history-plot{height:320px}.rate-history-panel .plot-note{padding:0;margin:5px 0 0;line-height:1.55}.rate-history-button:focus-visible,.rate-history-heading button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}@media(max-width:760px){.rate-history-panel{padding:14px 10px}.rate-history-options{align-items:flex-start;flex-direction:column;gap:9px}.rate-history-options label{align-items:flex-start;flex-direction:column;gap:5px}.rate-history-plot{height:290px}}
+
+/* Guided tour (19 Oct 2026) */
+.header-actions{display:flex;gap:10px;align-items:center}
+.tour-button{cursor:pointer;font-family:inherit}
+.tour-ring{position:fixed;z-index:1000;border-radius:10px;box-shadow:0 0 0 9999px rgba(25,41,33,.42),0 0 0 3px #f2c94c;pointer-events:none;transition:top .2s,left .2s,width .2s,height .2s}
+.tour-pop,.tour-welcome{position:fixed;z-index:1001;background:#fff;border:1px solid #aabbb0;border-radius:10px;box-shadow:0 12px 35px rgba(25,41,33,.25);padding:16px 18px;width:min(380px,calc(100vw - 32px));box-sizing:border-box;font-size:14px;line-height:1.45}
+.tour-pop.tour-center{top:50%!important;left:50%!important;transform:translate(-50%,-50%)}
+.tour-pop.tour-sheet{left:12px!important;right:12px;bottom:12px;top:auto!important;width:auto;transform:none}
+.tour-welcome{right:20px;bottom:20px}
+.tour-count{margin:0 0 4px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tour-title,.tour-welcome h2{margin:0 0 8px;font-size:16px;color:var(--ink);outline:none}
+.tour-text,.tour-welcome p{margin:0 0 14px;color:var(--ink)}
+.tour-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.tour-actions button{font:inherit;font-size:13px;border-radius:6px;padding:8px 12px;cursor:pointer;border:1px solid #cfd9d1;background:#fff;color:var(--green)}
+.tour-actions .tour-next,.tour-actions .tour-yes{background:var(--green);border-color:var(--green);color:#fff;margin-left:6px}
+.tour-actions .tour-skip,.tour-actions .tour-no{border-color:transparent;color:var(--muted)}
+.tour-actions button:disabled{opacity:.4;cursor:default}
+.tour-actions button:focus-visible{outline:2px solid #f2c94c;outline-offset:2px}
+@media(max-width:760px){.tour-welcome{left:12px;right:12px;bottom:12px;width:auto}.header-actions{gap:6px}}
