@@ -48,5 +48,8 @@
 .lang-menu{display:inline-flex;align-items:center;margin-right:8px}
 .lang-menu select{min-height:38px;padding:8px 26px 8px 10px;font-size:12px}
 @media(max-width:760px){.lang-menu{margin-right:6px}.lang-menu select{min-height:32px;padding:6px 22px 6px 8px;font-size:11px;max-width:96px}}
-[dir="rtl"] .controls,[dir="rtl"] header{direction:rtl}
+/* Right-to-left languages (tested with Hebrew and Arabic, 20 Oct 2026) */
+[dir="rtl"] .gauge-track,[dir="rtl"] .gauge-labels{direction:ltr}
+[dir="rtl"] .js-plotly-plot,[dir="rtl"] .warming-plot,[dir="rtl"] .heat-plot,[dir="rtl"] .rate-history-plot{direction:ltr}
+[dir="rtl"] .tour-pop,[dir="rtl"] .tour-welcome{direction:rtl;text-align:right}
 @media(max-width:760px){header:has(.lang-menu){flex-wrap:wrap;row-gap:14px}header:has(.lang-menu) .header-actions{margin-left:auto}}

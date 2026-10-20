@@ -24,6 +24,8 @@ The dashboard is written in British English (`en-GB`). Each other language is a 
 - **`%{x}`, `%{y:.3f}` and `<extra></extra>`-style codes** belong to the chart library. Copy them exactly.
 - **HTML tags** such as `<strong>`, `<em>`, `<code>`, `<b>` and `<span class="unit">` should be kept around the corresponding words.
 - **Numbers inside sentences** are formatted for your language automatically, with the right decimal comma or point. Don't write numbers into placeholders yourself.
+- **Right-to-left languages** (Hebrew, Arabic, and so on) need `"dir": "rtl"` in `_meta`. The page then mirrors its layout, keeps the charts' time axes left to right, and keeps numbers, ranges such as 1850–1900, and Latin units such as °C in the correct order. Write your own script's units (for example °م) as you normally would.
+- **Chinese, Japanese and similar scripts** need no special settings. Use full-width punctuation as usual.
 - **IPCC likelihood terms** (`likelihood.*`, such as "Very unlikely") are calibrated language. Use the IPCC's official translations of the AR6 likelihood scale where they exist.
 - **Method names** such as PIVW, CSCM, CGWL, GAM, FaIR and GWI are proper names. Usually leave them as they are.
 - **`dataset.*` keys** are text that comes with the data: method names, method notes, full names and the warming definitions. Translate them as for the other keys; the English values are refreshed from the data each time the build runs.
@@ -32,7 +34,6 @@ The dashboard is written in British English (`en-GB`). Each other language is a 
 
 - The 96 static figure images (Figure view and PNG/PDF downloads) are drawn by Python with English labels.
 - The comment lines at the top of the CSV downloads, the JSON metadata and the titles of cited papers.
-- The right-to-left layout is supported in principle (`dir: rtl`) but has not been tested.
 
 ## For maintainers
 

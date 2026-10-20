@@ -32,13 +32,31 @@ window.I18N = (() => {
   function fill(text, vars) {
     return vars ? text.replace(/(^|[^%])\{(\w+)\}/g, (all, pre, k) => pre + (k in vars ? vars[k] : '{' + k + '}')) : text;
   }
+  // Right-to-left scripts: keep numbers, ranges (1850–1900, 0.24 ± 0.12) and units (°C, %)
+  // as left-to-right islands so they are not reordered. Chart templates (%{...}) are left alone.
+  const NUMBER = '[-+−]?\\d(?:[\\d.,٫٬]*\\d)?'; // never ends in sentence punctuation
+  const UNIT = '°\\s?[CF]'; // Latin units only; an RTL script's own unit (e.g. °م) follows normal text order
+  const NUMERIC = new RegExp(NUMBER + '(?:\\s*[–\\-±/]\\s*' + NUMBER + ')*(?:\\s?(?:' + UNIT + '|%|٪))?|' + UNIT, 'g');
+  const LETTER = /\p{L}/u;
+  function isolate(text) {
+    if ((meta.dir || 'ltr') !== 'rtl') return text;
+    const chart = text.includes('%{');
+    // Each line (charts break lines with <br>) is wrapped in a first-strong isolate, so it takes the
+    // direction of its own first letter: Hebrew/Arabic lines read right to left even inside the
+    // left-to-right charts, and English fallback lines keep their punctuation in place.
+    return text.split(/(<br\s*\/?>)/).map(line => {
+      if (/^<br/.test(line)) return line;
+      if (!chart) line = line.split(/(<[^>]*>)/).map(part => part.startsWith('<') ? part : part.replace(NUMERIC, m => '\u2066' + m.replace(/[–\/]/g, '\u2060$&\u2060') + '\u2069')).join('');
+      return LETTER.test(line.replace(/<[^>]*>/g, '')) ? '\u2068' + line + '\u2069' : line;
+    }).join('');
+  }
   function t(key, vars) {
     const text = key in strings ? strings[key] : key in source ? source[key] : key;
-    return fill(text, vars);
+    return isolate(fill(text, vars));
   }
   // Text that comes with the data (method labels, notes): translated only when a locale provides it.
   function tData(key, fallback, vars) {
-    return lang !== SOURCE && key in strings ? fill(strings[key], vars) : fallback;
+    return lang !== SOURCE && key in strings ? isolate(fill(strings[key], vars)) : fallback;
   }
 
   const formatters = new Map();
@@ -64,12 +82,13 @@ window.I18N = (() => {
     if (lang === SOURCE) return; // the HTML is written in en-GB
     for (const el of root.querySelectorAll('[data-i18n]')) {
       const key = el.getAttribute('data-i18n');
-      if (key in strings) el.innerHTML = strings[key];
+      if (key in strings) el.innerHTML = isolate(strings[key]);
+      else if ((meta.dir || 'ltr') === 'rtl') el.dir = 'auto'; // untranslated English keeps its own direction
     }
     for (const el of root.querySelectorAll('[data-i18n-attr]')) {
       for (const pair of el.getAttribute('data-i18n-attr').split(';')) {
         const [attr, key] = pair.split(':');
-        if (key in strings) el.setAttribute(attr, strings[key]);
+        if (key in strings) el.setAttribute(attr, isolate(strings[key]));
       }
     }
     if ('doc.title' in strings) document.title = strings['doc.title'];

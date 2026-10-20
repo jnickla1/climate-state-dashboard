@@ -64,7 +64,7 @@ let rateHistoryModule;
 async function updateRateHistory(){
  if(!data||$('rateHistoryPanel').hidden)return;
  try{
-  rateHistoryModule ||= import('./rate-history.js?v=20261020-i18n4');
+  rateHistoryModule ||= import('./rate-history.js?v=20261020-rtl');
   const module=await rateHistoryModule;
   if(!$('rateHistoryPanel').hidden)await module.renderRateHistory(data,$('method').value,$('rateHistoryCurrent').checked,commonLayout,plotConfig);
  }catch(error){rateHistoryModule=null;$('rateHistoryStatus').textContent=t('rates.openError',{error:error.message});}
