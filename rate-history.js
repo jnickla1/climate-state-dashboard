@@ -8,7 +8,7 @@ export async function renderRateHistory(data, method, showCurrent, layout, confi
   $('rateHistoryStatus').textContent = 'Loading rate history…';
   try {
     if (!cache.has(key)) {
-      const response = await fetch('assets/data/' + key + '_rate_history.json?v=20261019-supp');
+      const response = await fetch('assets/data/' + key + '_rate_history.json?v=20261020-seeds');
       if (!response.ok) throw new Error('Could not load rate history.');
       cache.set(key, await response.json());
     }
