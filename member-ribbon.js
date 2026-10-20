@@ -3,11 +3,12 @@
 window.MemberRibbon=(()=>{
   const node=id=>document.getElementById(id),cache=new Map();
   const state={revision:0,key:null,context:null,pinned:null,drawn:null,timer:null,lastPlotClick:0};
-  const defaultText='Hover or tap a smoothed member to show its approximate 95% calibrated uncertainty.';
+  const t=(key,vars)=>window.I18N?window.I18N.t(key,vars):key;
+  const defaultText=()=>t('ribbon.default');
   const ribbonTraces=()=>[
-    {type:'scatter',mode:'lines',x:[],y:[],line:{width:0},visible:false,hoverinfo:'skip',showlegend:false,connectgaps:false,name:'Selected member lower range'},
-    {type:'scatter',mode:'lines',x:[],y:[],line:{width:0},fill:'tonexty',fillcolor:'rgba(255,220,70,.30)',visible:false,hoverinfo:'skip',showlegend:false,connectgaps:false,name:'Selected member 95% range'},
-    {type:'scatter',mode:'lines',x:[],y:[],line:{color:'#ae8500',width:1.8},visible:false,hoverinfo:'text',showlegend:false,connectgaps:false,name:'Selected smoothed member'}
+    {type:'scatter',mode:'lines',x:[],y:[],line:{width:0},visible:false,hoverinfo:'skip',showlegend:false,connectgaps:false,name:t('ribbon.lowerName')},
+    {type:'scatter',mode:'lines',x:[],y:[],line:{width:0},fill:'tonexty',fillcolor:'rgba(255,220,70,.30)',visible:false,hoverinfo:'skip',showlegend:false,connectgaps:false,name:t('ribbon.rangeName')},
+    {type:'scatter',mode:'lines',x:[],y:[],line:{color:'#ae8500',width:1.8},visible:false,hoverinfo:'text',showlegend:false,connectgaps:false,name:t('ribbon.lineName')}
   ];
   function ribbonValues(center,se,indices){
     return {center:indices.map(i=>Number.isFinite(center[i])?center[i]:null),
@@ -18,26 +19,26 @@ window.MemberRibbon=(()=>{
     const key=data.baseline+'_'+data.goal;
     if(!cache.has(key))cache.set(key,(async()=>{
       const response=await fetch('assets/data/'+key+'_member_uncertainty.json?v=20261020-seeds');
-      if(!response.ok)throw Error('Matching uncertainty export is unavailable.');
+      if(!response.ok)throw Error(t('ribbon.unavailable'));
       const value=await response.json();
-      if(value.source_sha256!==data.metadata.source_sha256||JSON.stringify(value.years)!==JSON.stringify(data.years))throw Error('Uncertainty export does not match the displayed dataset.');
+      if(value.source_sha256!==data.metadata.source_sha256||JSON.stringify(value.years)!==JSON.stringify(data.years))throw Error(t('ribbon.mismatch'));
       return value;
     })().catch(error=>{cache.delete(key);throw error;}));
     return cache.get(key);
   }
   function clear(){
     clearTimeout(state.timer);state.pinned=null;state.drawn=null;
-    node('inspectMember').value='';node('clearMember').disabled=true;node('ribbonStatus').textContent=defaultText;
+    node('inspectMember').value='';node('clearMember').disabled=true;node('ribbonStatus').textContent=defaultText();
     if(state.context)Plotly.restyle(state.context.plot,{visible:false},state.context.slots);
   }
   function show(member,pin=false){
     const ctx=state.context;if(!ctx?.se||!Number.isInteger(member)||!ctx.md.current[member])return;
     clearTimeout(state.timer);if(pin)state.pinned=member;
     node('inspectMember').value=String(member);node('clearMember').disabled=false;
-    node('ribbonStatus').textContent='Member '+member+(state.pinned!==null?' selected':' hovered')+' · yellow: approximate 95% calibrated uncertainty (±1.96 SE), excluding spread across members.';
+    node('ribbonStatus').textContent=t(state.pinned!==null?'ribbon.selected':'ribbon.hovered',{i:member});
     if(state.drawn===member)return;
     state.drawn=member;const values=ribbonValues(ctx.md.current[member],ctx.se[member],ctx.indices);
-    Plotly.restyle(ctx.plot,{x:[ctx.years,ctx.years,ctx.years],y:[values.lower,values.upper,values.center],visible:[true,true,true],meta:[{},{},{ensembleMember:member}],hovertemplate:['','','Year %{x}<br>Selected member '+member+': %{y:.3f}°C<extra></extra>']},ctx.slots);
+    Plotly.restyle(ctx.plot,{x:[ctx.years,ctx.years,ctx.years],y:[values.lower,values.upper,values.center],visible:[true,true,true],meta:[{},{},{ensembleMember:member}],hovertemplate:['','',t('ribbon.hover',{i:member})+'<extra></extra>']},ctx.slots);
   }
   function memberFrom(event){
     const value=event.points?.find(p=>Number.isInteger(p.data?.meta?.ensembleMember))?.data.meta.ensembleMember;
@@ -64,21 +65,21 @@ window.MemberRibbon=(()=>{
     if(revision!==state.revision)return;bind(plot);
     if(node('background').value!=='smoothed')return;
     const ctx={plot,md,indices,years:indices.map(i=>data.years[i]),slots:[start,start+1,start+2],se:null};state.context=ctx;
-    const select=node('inspectMember');select.replaceChildren();const initial=document.createElement('option');initial.value='';initial.textContent='Hover / tap a line, or choose';select.append(initial);
-    for(let member=0;member<md.current.length;member++){const option=document.createElement('option');option.value=String(member);option.textContent='Member '+member;select.append(option);}select.disabled=true;
-    node('ribbonStatus').textContent='Loading calibrated member uncertainty…';node('clearMember').disabled=true;
+    const select=node('inspectMember');select.replaceChildren();const initial=document.createElement('option');initial.value='';initial.textContent=t('ribbon.choose');select.append(initial);
+    for(let member=0;member<md.current.length;member++){const option=document.createElement('option');option.value=String(member);option.textContent=t('plot.memberName',{i:member});select.append(option);}select.disabled=true;
+    node('ribbonStatus').textContent=t('ribbon.loading');node('clearMember').disabled=true;
     try{
       const value=await uncertainty(data);if(revision!==state.revision)return;
       ctx.se=value.methods[node('method').value]?.current_se;
-      if(!Array.isArray(ctx.se)||ctx.se.length!==md.current.length)throw Error('Selected method uncertainty is unavailable.');
-      select.disabled=false;node('ribbonStatus').textContent=defaultText;
+      if(!Array.isArray(ctx.se)||ctx.se.length!==md.current.length)throw Error(t('ribbon.methodUnavailable'));
+      select.disabled=false;node('ribbonStatus').textContent=defaultText();
       if(state.pinned!==null)show(state.pinned,true);
     }catch(error){if(revision===state.revision)node('ribbonStatus').textContent=error.message;}
   }
   function updateHint(smoothed,interactive){
     node('memberRibbonControls').hidden=!smoothed||!interactive;
-    node('uncertaintyHintText').textContent=smoothed?'Hover or tap a smoothed line to see its uncertainty in pale yellow. Only the selected member gets a ribbon.':'Try “Smoothed ensemble (selected method)” under Temperature series, then hover or tap a line to explore its uncertainty.';
-    node('trySmoothed').hidden=smoothed&&interactive;node('trySmoothed').textContent=interactive?'Try smoothed lines':'Try interactive uncertainty';
+    node('uncertaintyHintText').textContent=smoothed?t('hint.smoothed'):t('hint.tryText');
+    node('trySmoothed').hidden=smoothed&&interactive;node('trySmoothed').textContent=interactive?t('hint.tryButton'):t('hint.tryInteractive');
   }
   node('inspectMember').addEventListener('change',event=>event.target.value===''?clear():show(Number(event.target.value),true));
   node('clearMember').addEventListener('click',clear);

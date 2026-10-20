@@ -4,26 +4,19 @@
 (function () {
   'use strict';
   var STORE_KEY = 'climateStateTour';
+  // Step text lives in i18n/en-GB.json (tour.stepN.title / tour.stepN.text).
   var steps = [
-    { target: null, title: 'Welcome to the climate state dashboard',
-      text: 'This page estimates the world’s long-term warming: the underlying level, not any single hot or cold year. It combines several estimation methods from Thorne et al. with 100 versions of the observed temperature record, so every number comes with an uncertainty range.' },
-    { target: 'section.controls', title: 'Choose what to look at',
-      text: '<b>Warming:</b> “Realised” is total long-term warming; “Anthropogenic” is the human-caused part. <b>Baseline:</b> warming relative to 1850–1900 (pre-industrial) or to 1981–2010. <b>Method:</b> the PIVW combination is the paper’s recommended blend of methods; you can also view each method on its own.' },
-    { target: 'section.metrics > article:nth-of-type(1)', title: 'Current warming level',
-      text: 'The estimated long-term warming in 2025. The 95% range gives the values the true level very likely lies between.' },
-    { target: 'section.metrics > article:nth-of-type(2)', title: 'How fast it is rising',
-      text: 'The current rate of long-term warming, in °C per decade, with its 95% range. “Explore rates over time” shows how this rate has changed historically.' },
-    { target: 'article.likelihood-card', title: 'Has 1.5 °C already been passed?',
-      text: 'The probability that long-term warming is already above 1.5 °C, described with the IPCC likelihood scale (for example, “very unlikely” means 0–10%).' },
-    { target: '#warmingPlot', title: 'Warming levels and crossing times',
-      text: 'Grey lines are the 100 versions of the observed temperature record. Blue marks when the 20-year average actually crossed 0.5 °C and 1.0 °C; red shows when the selected method placed each crossing. Hover for values, drag to zoom, and double-click to reset.' },
-    { target: '#heatPlot', title: 'Exceedance probabilities',
-      text: 'For each warming level and year, the green shading shows the probability that the level had been exceeded. Darker green means more certain.' },
-    { target: 'article.density-card', title: 'When was each level crossed?',
-      text: 'Bars show in which year the ensemble members first crossed each level; curves show the selected method’s own estimate. Turn on “Magnify 1.5°C panel” to see the small probabilities near 1.5 °C.' },
-    { target: 'section.lower-grid', title: 'Data, references and more help',
-      text: 'Download the data and figures behind every view, and follow the links to each method’s papers. “How to read this dashboard” at the bottom of the page explains the definitions and caveats. Replay this tour anytime with the <b>Tour</b> button at the top.' }
+    { target: null, key: 'tour.step1' },
+    { target: 'section.controls', key: 'tour.step2' },
+    { target: 'section.metrics > article:nth-of-type(1)', key: 'tour.step3' },
+    { target: 'section.metrics > article:nth-of-type(2)', key: 'tour.step4' },
+    { target: 'article.likelihood-card', key: 'tour.step5' },
+    { target: '#warmingPlot', key: 'tour.step6' },
+    { target: '#heatPlot', key: 'tour.step7' },
+    { target: 'article.density-card', key: 'tour.step8' },
+    { target: 'section.lower-grid', key: 'tour.step9' }
   ];
+  function t(key, vars) { return window.I18N ? window.I18N.t(key, vars) : key; }
 
   function remember(value) { try { window.localStorage.setItem(STORE_KEY, value); } catch (e) { /* storage unavailable */ } }
   function remembered() { try { return window.localStorage.getItem(STORE_KEY); } catch (e) { return null; } }
@@ -91,11 +84,11 @@
     if (i >= steps.length) { closeAll(true); return; }
     index = i;
     var step = steps[i];
-    pop.querySelector('.tour-count').textContent = (i + 1) + ' of ' + steps.length;
-    pop.querySelector('.tour-title').textContent = step.title;
-    pop.querySelector('.tour-text').innerHTML = step.text;
+    pop.querySelector('.tour-count').textContent = t('tour.count', { i: i + 1, n: steps.length });
+    pop.querySelector('.tour-title').textContent = t(step.key + '.title');
+    pop.querySelector('.tour-text').innerHTML = t(step.key + '.text');
     pop.querySelector('.tour-back').disabled = i === 0;
-    pop.querySelector('.tour-next').textContent = i === steps.length - 1 ? 'Finish' : 'Next';
+    pop.querySelector('.tour-next').textContent = i === steps.length - 1 ? t('tour.finish') : t('tour.next');
     var target = step.target ? document.querySelector(step.target) : null;
     if (visible(target)) {
       target.scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -119,8 +112,8 @@
     pop.setAttribute('role', 'dialog');
     pop.setAttribute('aria-labelledby', 'tourTitle');
     pop.innerHTML = '<p class="tour-count"></p><h2 class="tour-title" id="tourTitle" tabindex="-1"></h2><p class="tour-text"></p>' +
-      '<div class="tour-actions"><button type="button" class="tour-skip">Skip tour</button><span>' +
-      '<button type="button" class="tour-back">Back</button><button type="button" class="tour-next">Next</button></span></div>';
+      '<div class="tour-actions"><button type="button" class="tour-skip">' + t('tour.skip') + '</button><span>' +
+      '<button type="button" class="tour-back">' + t('tour.back') + '</button><button type="button" class="tour-next">' + t('tour.next') + '</button></span></div>';
     document.body.appendChild(ring);
     document.body.appendChild(pop);
     pop.querySelector('.tour-skip').addEventListener('click', function () { closeAll(true); });
@@ -137,10 +130,10 @@
     card.id = 'tourWelcome';
     card.setAttribute('role', 'dialog');
     card.setAttribute('aria-labelledby', 'tourWelcomeTitle');
-    card.innerHTML = '<h2 id="tourWelcomeTitle">New to this dashboard?</h2>' +
-      '<p>A one-minute tour explains what each panel shows and how to read it.</p>' +
-      '<div class="tour-actions"><button type="button" class="tour-no">No thanks</button>' +
-      '<button type="button" class="tour-yes">Take the 1-minute tour</button></div>';
+    card.innerHTML = '<h2 id="tourWelcomeTitle">' + t('tour.welcomeTitle') + '</h2>' +
+      '<p>' + t('tour.welcomeText') + '</p>' +
+      '<div class="tour-actions"><button type="button" class="tour-no">' + t('tour.welcomeNo') + '</button>' +
+      '<button type="button" class="tour-yes">' + t('tour.welcomeYes') + '</button></div>';
     document.body.appendChild(card);
     card.querySelector('.tour-no').addEventListener('click', function () { remember('dismissed'); card.remove(); });
     card.querySelector('.tour-yes').addEventListener('click', function () { start(); });
@@ -149,12 +142,12 @@
   function addHeaderButton() {
     var paper = document.querySelector('header .paper-link');
     if (!paper || document.getElementById('tourButton')) return;
-    var wrap = el('div', 'header-actions');
-    paper.parentNode.insertBefore(wrap, paper);
-    var button = el('button', 'paper-link tour-button', 'Tour');
+    var wrap = paper.closest('.header-actions');
+    if (!wrap) { wrap = el('div', 'header-actions'); paper.parentNode.insertBefore(wrap, paper); }
+    var button = el('button', 'paper-link tour-button', t('tour.button'));
     button.id = 'tourButton';
     button.type = 'button';
-    button.setAttribute('aria-label', 'Start the guided tour of this dashboard');
+    button.setAttribute('aria-label', t('tour.buttonAria'));
     button.addEventListener('click', start);
     wrap.appendChild(button);
     wrap.appendChild(paper);
@@ -165,7 +158,11 @@
     if (!remembered()) setTimeout(showWelcome, 900);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  // Wait for the chosen language before drawing any text.
+  var whenReady = window.I18N ? window.I18N.ready : Promise.resolve();
+  whenReady.then(function () {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  });
   window.climateStateTour = { start: start };
 })();
