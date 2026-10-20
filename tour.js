@@ -8,7 +8,7 @@
     { target: null, title: 'Welcome to the climate state dashboard',
       text: 'This page estimates the world’s long-term warming: the underlying level, not any single hot or cold year. It combines several estimation methods from Thorne et al. with 100 versions of the observed temperature record, so every number comes with an uncertainty range.' },
     { target: 'section.controls', title: 'Choose what to look at',
-      text: '<b>Warming:</b> “Realized” is total long-term warming; “Anthropogenic” is the human-caused part. <b>Baseline:</b> warming relative to 1850–1900 (pre-industrial) or to 1981–2010. <b>Method:</b> the PIVW combination is the paper’s recommended blend of methods; you can also view each method on its own.' },
+      text: '<b>Warming:</b> “Realised” is total long-term warming; “Anthropogenic” is the human-caused part. <b>Baseline:</b> warming relative to 1850–1900 (pre-industrial) or to 1981–2010. <b>Method:</b> the PIVW combination is the paper’s recommended blend of methods; you can also view each method on its own.' },
     { target: 'section.metrics > article:nth-of-type(1)', title: 'Current warming level',
       text: 'The estimated long-term warming in 2025. The 95% range gives the values the true level very likely lies between.' },
     { target: 'section.metrics > article:nth-of-type(2)', title: 'How fast it is rising',
