@@ -18,7 +18,7 @@ window.MemberRibbon=(()=>{
   async function uncertainty(data){
     const key=data.baseline+'_'+data.goal;
     if(!cache.has(key))cache.set(key,(async()=>{
-      const response=await fetch('assets/data/'+key+'_member_uncertainty.json?v=20261020-seeds');
+      const response=await fetch('assets/data/'+key+'_member_uncertainty.json?v=20261021-data');
       if(!response.ok)throw Error(t('ribbon.unavailable'));
       const value=await response.json();
       if(value.source_sha256!==data.metadata.source_sha256||JSON.stringify(value.years)!==JSON.stringify(data.years))throw Error(t('ribbon.mismatch'));

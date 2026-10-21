@@ -20,7 +20,7 @@ const plotConfig={responsive:true,displaylogo:false,scrollZoom:false,modeBarButt
 $('densityZoom').checked=qs.get('magnify')==='1';
 $('benchmarkRates').checked=qs.get('benchmarkrates')!=='0';$('methodRates').checked=qs.get('methodrates')!=='0';
 const commonLayout={paper_bgcolor:'#fff',plot_bgcolor:'#fff',font:{family:'Inter, -apple-system, sans-serif',color:'#52635a',size:11},hoverlabel:{bgcolor:'#fff',font:{color:'#192921'}},showlegend:false};
-async function getData(b,g){const key=b+'_'+g;if(!cache.has(key)){const r=await fetch('assets/data/'+key+'.json?v=20261020-seeds');if(!r.ok)throw new Error(t('error.loadData',{key}));cache.set(key,await r.json());}return cache.get(key);}
+async function getData(b,g){const key=b+'_'+g;if(!cache.has(key)){const r=await fetch('assets/data/'+key+'.json?v=20261021-data');if(!r.ok)throw new Error(t('error.loadData',{key}));cache.set(key,await r.json());}return cache.get(key);}
 async function changeDataset(){const id=++requestId;$('status').textContent=t('status.loading');try{const d=await getData($('baseline').value,$('goal').value);if(id!==requestId)return;const previous=data?$('method').value:qs.get('method');data=d;$('method').replaceChildren();for(const [key,value]of Object.entries(d.methods)){const option=document.createElement('option');option.value=key;option.textContent=optionLabel(key,value);const groupName=value.supplementary?t('methods.groupSupplementary'):key.endsWith('_comb')?t('methods.groupCombinations'):t('methods.groupIndividual');let group=[...$('method').children].find(g=>g.label===groupName);if(!group){group=document.createElement('optgroup');group.label=groupName;$('method').append(group);}group.append(option);}if(d.methods[previous])$('method').value=previous;else if(d.methods[qs.get('method')])$('method').value=qs.get('method');render();}catch(e){$('status').textContent=e.message;}}
 function selected(){return data.methods[$('method').value];}
 function imagePath(){return 'assets/figures/'+data.baseline+'_'+data.goal+'__'+$('method').value+'__'+$('background').value+'.png';}
@@ -58,13 +58,13 @@ function renderDensities(md){
 }
 function setView(next){view=next;$('interactiveView').hidden=view!=='interactive';$('imageView').hidden=view!=='image';for(const [id,v]of [['interactiveButton','interactive'],['imageButton','image']]){$(id).classList.toggle('active',view===v);$(id).setAttribute('aria-pressed',String(view===v));}if(data)render();}
 $('goal').addEventListener('change',changeDataset);$('baseline').addEventListener('change',changeDataset);for(const id of ['method','background'])$(id).addEventListener('change',()=>data&&render());$('densityZoom').addEventListener('change',()=>data&&render());for(const id of ['benchmarkRates','methodRates'])$(id).addEventListener('change',()=>data&&render());$('interactiveButton').addEventListener('click',()=>setView('interactive'));$('imageButton').addEventListener('click',()=>setView('image'));
-(async()=>{await I18N.ready;const separators=I18N.separators();if(separators)commonLayout.separators=separators;try{const r=await fetch('assets/data/method_references.json?v=20261020-seeds');if(r.ok)methodRefs=await r.json();}catch{}if(qs.get('view')==='image')setView('image');await changeDataset();})();
+(async()=>{await I18N.ready;const separators=I18N.separators();if(separators)commonLayout.separators=separators;try{const r=await fetch('assets/data/method_references.json?v=20261021-data');if(r.ok)methodRefs=await r.json();}catch{}if(qs.get('view')==='image')setView('image');await changeDataset();})();
 
 let rateHistoryModule;
 async function updateRateHistory(){
  if(!data||$('rateHistoryPanel').hidden)return;
  try{
-  rateHistoryModule ||= import('./rate-history.js?v=20261020-rtl');
+  rateHistoryModule ||= import('./rate-history.js?v=20261021-data');
   const module=await rateHistoryModule;
   if(!$('rateHistoryPanel').hidden)await module.renderRateHistory(data,$('method').value,$('rateHistoryCurrent').checked,commonLayout,plotConfig);
  }catch(error){rateHistoryModule=null;$('rateHistoryStatus').textContent=t('rates.openError',{error:error.message});}
